@@ -1,6 +1,5 @@
 import { integer, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
-import { SubjectTable } from "./subject";
 import { relations } from "drizzle-orm";
 import { ChapterTable } from "./chapter";
 import { UserLessonCompleteTable } from "./userLessonComplete";
@@ -24,9 +23,9 @@ export const LessonTable = pgTable("lessons", {
 });
 
 export const LessonRelationships = relations(LessonTable, ({ one, many }) => ({
-  subject: one(SubjectTable, {
+  subject: one(ChapterTable, {
     fields: [LessonTable.id],
-    references: [SubjectTable.id],
+    references: [ChapterTable.id],
   }),
   userChapterComplete: many(UserLessonCompleteTable),
 }));
