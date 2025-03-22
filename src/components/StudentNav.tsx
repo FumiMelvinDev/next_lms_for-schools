@@ -47,6 +47,7 @@ const StudentNav = () => {
 
 async function AdminTeacherLink() {
   const user = await getCurrentUser();
+  console.log(user.user?.name);
 
   if (!canAccessTeacherPages(user)) return null;
 
