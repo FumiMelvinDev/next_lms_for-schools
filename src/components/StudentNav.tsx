@@ -1,6 +1,8 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { getCurrentUser } from "@/services/clerk";
+import { canAccessTeacherPages } from "@/permissions/general";
 
 const StudentNav = () => {
   return (
@@ -10,18 +12,7 @@ const StudentNav = () => {
           Nghonyama High
         </Link>
         <SignedIn>
-          <Link
-            href={"/admin"}
-            className="hover:bg-accent/70 flex items-center px-2"
-          >
-            Admin
-          </Link>
-          <Link
-            href={"/teacher"}
-            className="hover:bg-accent/70 flex items-center px-2"
-          >
-            Teacher
-          </Link>
+          <AdminTeacherLink />
           <Link
             href={"/subjects"}
             className="hover:bg-accent/70 flex items-center px-2"
@@ -53,5 +44,17 @@ const StudentNav = () => {
     </div>
   );
 };
+
+async function AdminTeacherLink() {
+  const user = await getCurrentUser();
+
+  if (!canAccessTeacherPages(user)) return null;
+
+  return (
+    <Link href={"/admin"} className="hover:bg-accent/70 flex items-center px-2">
+      Admin
+    </Link>
+  );
+}
 
 export default StudentNav;
