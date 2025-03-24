@@ -8,7 +8,7 @@ const StudentNav = () => {
   return (
     <div className="flex h-12 shadow bg-background z-10">
       <nav className="flex gap-4 container">
-        <Link href={"/"} className="mr-auto text-lg hover:underline px-2">
+        <Link href={"/"} className="mr-auto text-lg hover:underline">
           Nghonyama High
         </Link>
         <SignedIn>
