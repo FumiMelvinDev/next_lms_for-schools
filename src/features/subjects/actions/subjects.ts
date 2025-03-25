@@ -3,8 +3,12 @@
 import { z } from "zod";
 import { subjectSchema } from "../schemas/subjects";
 import { redirect } from "next/navigation";
-import { canCreateSubject } from "../permissions/subjects";
-import { insertSubject } from "../database/subjects";
+import { canCreateSubject, canDeleteSubject } from "../permissions/subjects";
+import {
+  insertSubject,
+  deleteSubject as deleteSubjectDB,
+} from "../database/subjects";
+import { getCurrentUser } from "@/services/clerk";
 
 export async function createSubject(unsafeData: z.infer<typeof subjectSchema>) {
   const { success, data } = subjectSchema.safeParse(unsafeData);
@@ -16,4 +20,17 @@ export async function createSubject(unsafeData: z.infer<typeof subjectSchema>) {
   const subject = await insertSubject(data);
 
   redirect(`/admin/subjects/${subject.id}/edit`);
+}
+
+// function wait(ms: number) {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// }
+
+export async function deleteSubject(id: string) {
+  if (!canDeleteSubject(await getCurrentUser())) {
+    return { error: true, message: "Error, Subject not deleted" };
+  }
+
+  await deleteSubjectDB(id);
+  return { error: false, message: "Subject deleted successfully" };
 }
