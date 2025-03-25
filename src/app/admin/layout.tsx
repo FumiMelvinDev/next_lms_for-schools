@@ -1,4 +1,5 @@
 import AdminNav from "@/components/AdminNav";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function AdminLayout({
   children,
@@ -7,6 +8,7 @@ export default function AdminLayout({
     <div>
       <AdminNav />
       {children}
+      <Toaster richColors position="top-right" />
     </div>
   );
 }
