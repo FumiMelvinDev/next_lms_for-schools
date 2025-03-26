@@ -12,6 +12,9 @@ import {
   UserSubjectAccessTable,
 } from "@/drizzle/schema";
 import { asc, countDistinct, eq } from "drizzle-orm";
+import { getUserSubjectAccessGlobalTag } from "@/features/subjects/database/cache/userSubjectAccess";
+import { getChapterGlobalTag } from "@/features/chapters/database/cache/chapters";
+import { getLessonGlobalTag } from "@/features/lessons/database/cache/lessons";
 
 export default async function SubjectsPage() {
   const subjects = await getSubjects();
@@ -31,7 +34,12 @@ export default async function SubjectsPage() {
 async function getSubjects() {
   "use cache";
 
-  cacheTag(getSubjectGlobalTag());
+  cacheTag(
+    getSubjectGlobalTag(),
+    getUserSubjectAccessGlobalTag(),
+    getChapterGlobalTag(),
+    getLessonGlobalTag()
+  );
 
   return db
     .select({

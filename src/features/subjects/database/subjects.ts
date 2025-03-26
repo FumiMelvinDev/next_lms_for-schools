@@ -12,6 +12,22 @@ export async function insertSubject(data: typeof SubjectTable.$inferInsert) {
   return newSubject;
 }
 
+export async function updateSubject(
+  id: string,
+  data: typeof SubjectTable.$inferInsert
+) {
+  const [updatedSubject] = await db
+    .update(SubjectTable)
+    .set(data)
+    .where(eq(SubjectTable.id, id))
+    .returning();
+
+  if (updatedSubject == null) throw new Error("Failed to update subject");
+  revalidateSubjectCache(updatedSubject.id);
+
+  return updatedSubject;
+}
+
 export async function deleteSubject(id: string) {
   const [deleteSubject] = await db
     .delete(SubjectTable)

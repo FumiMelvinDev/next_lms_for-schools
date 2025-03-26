@@ -3,6 +3,7 @@ import { pgTable, text } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { SubjectGradeTable } from "./subjectGrade";
 import { UserSubjectAccessTable } from "./userSubjectAccess";
+import { ChapterTable } from "./chapter";
 
 export const SubjectTable = pgTable("subjects", {
   id,
@@ -15,4 +16,5 @@ export const SubjectTable = pgTable("subjects", {
 export const SubjectRelationships = relations(SubjectTable, ({ many }) => ({
   subjectGrade: many(SubjectGradeTable),
   userSubjectAcess: many(UserSubjectAccessTable),
+  chapters: many(ChapterTable),
 }));

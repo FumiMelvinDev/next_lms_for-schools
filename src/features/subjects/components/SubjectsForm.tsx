@@ -16,20 +16,31 @@ import { RequiredLableIcon } from "@/components/RequiredLabelIcon";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { createSubject } from "../actions/subjects";
+import { createSubject, updateSubject } from "../actions/subjects";
 import { toast } from "sonner";
 
-export function SubjectForm() {
+export function SubjectForm({
+  subject,
+}: {
+  subject?: {
+    id: string;
+    name: string;
+    description: string;
+  };
+}) {
   const form = useForm<z.infer<typeof subjectSchema>>({
     resolver: zodResolver(subjectSchema),
-    defaultValues: {
+    defaultValues: subject ?? {
       name: "",
       description: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof subjectSchema>) {
-    const data = await createSubject(values);
+    const action =
+      subject == null ? createSubject : updateSubject.bind(null, subject.id);
+
+    const data = await action(values);
 
     if (data.error) {
       toast.error(data.message);

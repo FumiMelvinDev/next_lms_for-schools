@@ -11,7 +11,7 @@ export function PageHeader({
 }) {
   return (
     <div className={cn("mb-6 flex items-center justify-between", className)}>
-      <h1 className="text-2xl font-semibold">{title}</h1>
+      <h1 className="text-xl font-semibold">{title}</h1>
       {children && <div>{children}</div>}
     </div>
   );
