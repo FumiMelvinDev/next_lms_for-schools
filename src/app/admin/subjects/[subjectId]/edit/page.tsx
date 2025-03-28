@@ -1,13 +1,17 @@
 import { PageHeader } from "@/components/PageHeader";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { db } from "@/drizzle/db";
 import { ChapterTable, LessonTable, SubjectTable } from "@/drizzle/schema";
+import { ChapterFormDialog } from "@/features/chapters/components/ChapterFormDialog";
 import { getChapterSubjectTag } from "@/features/chapters/database/cache/chapters";
 import { getLessonSubjectTag } from "@/features/lessons/database/cache/lessons";
 import { SubjectForm } from "@/features/subjects/components/SubjectsForm";
 import { getSubjectIdTag } from "@/features/subjects/database/cache/subjects";
 import { asc, eq } from "drizzle-orm";
+import { PlusIcon } from "lucide-react";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { notFound } from "next/navigation";
 
@@ -29,7 +33,21 @@ export default async function EditSubjectPage({
           <TabsTrigger value="lessons">Lessons</TabsTrigger>
           <TabsTrigger value="details">Details</TabsTrigger>
         </TabsList>
-        <TabsContent value="lessons">Lessons</TabsContent>
+        <TabsContent value="lessons">
+          <Card>
+            <CardHeader className="flex items-center justify-between flex-row">
+              <CardTitle>Chapters</CardTitle>
+              <ChapterFormDialog subjectId={subjectId}>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <PlusIcon />
+                    New Chapter
+                  </Button>
+                </DialogTrigger>
+              </ChapterFormDialog>
+            </CardHeader>
+          </Card>
+        </TabsContent>
         <TabsContent value="details">
           <Card>
             <CardHeader>

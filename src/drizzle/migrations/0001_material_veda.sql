@@ -1,0 +1,1 @@
+ALTER TABLE "_chapters" ADD COLUMN "order" integer;
