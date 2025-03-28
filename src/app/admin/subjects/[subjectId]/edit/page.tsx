@@ -1,17 +1,20 @@
+import { ActionButton } from "@/components/ActionButton";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { db } from "@/drizzle/db";
 import { ChapterTable, LessonTable, SubjectTable } from "@/drizzle/schema";
+import { deleteChapter } from "@/features/chapters/actions/chapters";
 import { ChapterFormDialog } from "@/features/chapters/components/ChapterFormDialog";
 import { getChapterSubjectTag } from "@/features/chapters/database/cache/chapters";
 import { getLessonSubjectTag } from "@/features/lessons/database/cache/lessons";
 import { SubjectForm } from "@/features/subjects/components/SubjectsForm";
 import { getSubjectIdTag } from "@/features/subjects/database/cache/subjects";
+import { cn } from "@/lib/utils";
 import { asc, eq } from "drizzle-orm";
-import { PlusIcon } from "lucide-react";
+import { EyeClosedIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { notFound } from "next/navigation";
 
@@ -46,6 +49,39 @@ export default async function EditSubjectPage({
                 </DialogTrigger>
               </ChapterFormDialog>
             </CardHeader>
+            <CardContent>
+              {subject.chapters.map((chapter) => (
+                <div key={chapter.id} className="flex items-center gap-1">
+                  <div
+                    className={cn(
+                      "contents",
+                      chapter.status === "inactive" && "text-muted-foreground"
+                    )}
+                  >
+                    {chapter.status === "inactive" && (
+                      <EyeClosedIcon className="size-4" />
+                    )}
+                    {chapter.name}
+                  </div>
+                  <ChapterFormDialog subjectId={subjectId} chapter={chapter}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size={"sm"} className="ml-auto">
+                        Edit
+                      </Button>
+                    </DialogTrigger>
+                  </ChapterFormDialog>
+                  <ActionButton
+                    action={deleteChapter.bind(null, chapter.id)}
+                    requiresConfirmation
+                    variant={"destructiveOutline"}
+                    size={"sm"}
+                  >
+                    <Trash2Icon />
+                    <span className="sr-only">Delete</span>
+                  </ActionButton>
+                </div>
+              ))}
+            </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="details">

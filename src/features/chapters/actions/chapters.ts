@@ -37,20 +37,20 @@ export async function updateChapter(
   const { success, data } = chapterSchema.safeParse(unsafeData);
 
   if (!success || !canUpdateChapter(await getCurrentUser())) {
-    return { error: true, message: "There was an error updating your section" };
+    return { error: true, message: "There was an error updating your chapter" };
   }
 
   await updateChapterDb(id, data);
 
-  return { error: false, message: "Successfully updated your section" };
+  return { error: false, message: "Successfully updated your chapter" };
 }
 
-export async function deleteSection(id: string) {
+export async function deleteChapter(id: string) {
   if (!canDeleteChapter(await getCurrentUser())) {
-    return { error: true, message: "Error deleting your section" };
+    return { error: true, message: "Error deleting your chapter" };
   }
 
   await deleteChapterDb(id);
 
-  return { error: false, message: "Successfully deleted your section" };
+  return { error: false, message: "Successfully deleted your chapter" };
 }

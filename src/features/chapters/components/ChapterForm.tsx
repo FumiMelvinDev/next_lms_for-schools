@@ -29,6 +29,7 @@ import { createChapter, updateChapter } from "../actions/chapters";
 export function ChapterForm({
   chapter,
   subjectId,
+  onSuccess,
 }: {
   chapter?: {
     id: string;
@@ -36,6 +37,7 @@ export function ChapterForm({
     status: _chapterStatus;
   };
   subjectId: string;
+  onSuccess?: () => void;
 }) {
   const form = useForm<z.infer<typeof chapterSchema>>({
     resolver: zodResolver(chapterSchema),
@@ -57,6 +59,7 @@ export function ChapterForm({
       toast.error(data.message);
     } else {
       toast.success(data.message);
+      onSuccess?.();
     }
   }
 

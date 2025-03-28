@@ -1,7 +1,10 @@
+"use client";
+
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { _chapterStatus } from "@/drizzle/schema";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { ChapterForm } from "./ChapterForm";
+import { useState } from "react";
 
 export function ChapterFormDialog({
   subjectId,
@@ -12,8 +15,10 @@ export function ChapterFormDialog({
   children: React.ReactNode;
   chapter?: { id: string; name: string; status: _chapterStatus };
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {children}
       <DialogContent>
         <DialogHeader>
@@ -22,7 +27,11 @@ export function ChapterFormDialog({
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          <ChapterForm chapter={chapter} subjectId={subjectId} />
+          <ChapterForm
+            chapter={chapter}
+            subjectId={subjectId}
+            onSuccess={() => setIsOpen(false)}
+          />
         </div>
       </DialogContent>
     </Dialog>
